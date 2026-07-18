@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 import environ
@@ -21,16 +22,19 @@ env = environ.Env(
     DJANGO_DEPURACION=(bool, False),
     DJANGO_HOSTS_PERMITIDOS=(list, ["localhost", "127.0.0.1"]),
 )
-environ.Env.read_env(BASE_DIR / ".env")
+
+for archivo_entorno in (BASE_DIR.parent / ".env", BASE_DIR / ".env"):
+    if archivo_entorno.exists():
+        environ.Env.read_env(archivo_entorno)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env(
+SECRET_KEY = os.environ.get(
     "DJANGO_CLAVE_SECRETA",
-    default="django-insecure-local-development-only",
+    "django-insecure-local-development-only",
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -85,12 +89,26 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    "default": env.db(
-        "URL_BASE_DE_DATOS",
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-    )
-}
+nombre_base_datos_postgres = env("POSTGRES_DB", default=None)
+
+if nombre_base_datos_postgres:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": nombre_base_datos_postgres,
+            "USER": env("POSTGRES_USER"),
+            "PASSWORD": env("POSTGRES_PASSWORD"),
+            "HOST": env("POSTGRES_HOST"),
+            "PORT": env.int("POSTGRES_PORT", default=5432),
+        }
+    }
+else:
+    DATABASES = {
+        "default": env.db(
+            "URL_BASE_DE_DATOS",
+            default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        )
+    }
 
 
 # Password validation

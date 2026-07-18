@@ -4,4 +4,4 @@ from rest_framework.response import Response
 
 @api_view(["GET"])
 def comprobar_salud(solicitud):
-    return Response({"estado": "Ok"})
+    return Response({"status": "ok"})
