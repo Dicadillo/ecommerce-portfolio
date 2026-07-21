@@ -49,7 +49,7 @@ def create_order_from_cart(user, delivery_data):
 
     order = Order.objects.create(
         user=user,
-        status=Order.Status.CONFIRMED,
+        status=Order.Status.PENDING,
         **delivery_data,
     )
     total = Decimal("0.00")

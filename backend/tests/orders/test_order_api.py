@@ -69,7 +69,7 @@ def test_create_order_from_cart(authenticated_client, user, product_factory):
     response = checkout(authenticated_client)
 
     assert response.status_code == 201
-    assert response.data["estado"] == "confirmado"
+    assert response.data["estado"] == "pendiente"
     assert response.data["nombre_destinatario"] == "Ada Lovelace"
     assert response.data["total"] == "51.00"
     assert response.data["articulos"] == [
