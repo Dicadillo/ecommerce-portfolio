@@ -17,3 +17,25 @@ class CatalogPagination(PageNumberPagination):
                 "resultados": data,
             }
         )
+
+    def get_paginated_response_schema(self, schema):
+        return {
+            "type": "object",
+            "required": ["conteo", "resultados"],
+            "properties": {
+                "conteo": {"type": "integer", "example": 25},
+                "siguiente": {
+                    "type": "string",
+                    "format": "uri",
+                    "nullable": True,
+                    "example": "http://localhost:8000/api/productos/?pagina=2",
+                },
+                "anterior": {
+                    "type": "string",
+                    "format": "uri",
+                    "nullable": True,
+                    "example": None,
+                },
+                "resultados": schema,
+            },
+        }

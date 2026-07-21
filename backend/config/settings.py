@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "drf_spectacular",
     "rest_framework",
     "rest_framework_simplejwt.token_blacklist",
     "cart",
@@ -165,7 +166,21 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "EXCEPTION_HANDLER": "config.exception_handlers.api_exception_handler",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "API de E-commerce",
+    "DESCRIPTION": (
+        "API REST para catálogo, autenticación, carrito, pedidos y pagos "
+        "simulados. Los endpoints protegidos requieren un token JWT Bearer."
+    ),
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "COMPONENT_SPLIT_REQUEST": True,
+    "SCHEMA_PATH_PREFIX": r"/api",
+    "SWAGGER_UI_SETTINGS": {"persistAuthorization": True},
 }
 
 SIMPLE_JWT = {
