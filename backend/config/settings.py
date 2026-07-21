@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 import os
+from datetime import timedelta
 from pathlib import Path
 
 import environ
@@ -23,9 +24,9 @@ env = environ.Env(
     DJANGO_HOSTS_PERMITIDOS=(list, ["localhost", "127.0.0.1"]),
 )
 
-for archivo_entorno in (BASE_DIR.parent / ".env", BASE_DIR / ".env"):
-    if archivo_entorno.exists():
-        environ.Env.read_env(archivo_entorno)
+for environment_file in (BASE_DIR.parent / ".env", BASE_DIR / ".env"):
+    if environment_file.exists():
+        environ.Env.read_env(environment_file)
 
 
 # Quick-start development settings - unsuitable for production
@@ -53,8 +54,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",
     "catalog",
     "salud",
+    "users",
 ]
 
 MIDDLEWARE = [
@@ -90,13 +93,13 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-nombre_base_datos_postgres = env("POSTGRES_DB", default=None)
+postgres_database_name = env("POSTGRES_DB", default=None)
 
-if nombre_base_datos_postgres:
+if postgres_database_name:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": nombre_base_datos_postgres,
+            "NAME": postgres_database_name,
             "USER": env("POSTGRES_USER"),
             "PASSWORD": env("POSTGRES_PASSWORD"),
             "HOST": env("POSTGRES_HOST"),
@@ -136,7 +139,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "es-es"
 
 TIME_ZONE = "UTC"
 
@@ -154,3 +157,18 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "EXCEPTION_HANDLER": "config.exception_handlers.api_exception_handler",
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "SIGNING_KEY": env("JWT_CLAVE_FIRMA", default=SECRET_KEY),
+}
