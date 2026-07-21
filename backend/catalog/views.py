@@ -5,6 +5,7 @@ from drf_spectacular.utils import (
     extend_schema,
     extend_schema_view,
 )
+from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from catalog.filters import (
@@ -69,6 +70,8 @@ from config.openapi import BAD_REQUEST_RESPONSE, NOT_FOUND_RESPONSE
     ),
 )
 class CategoryViewSet(ReadOnlyModelViewSet):
+    authentication_classes = ()
+    permission_classes = (AllowAny,)
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     pagination_class = CatalogPagination
@@ -165,6 +168,8 @@ class CategoryViewSet(ReadOnlyModelViewSet):
     ),
 )
 class ProductViewSet(ReadOnlyModelViewSet):
+    authentication_classes = ()
+    permission_classes = (AllowAny,)
     queryset = Product.objects.select_related("category").all()
     serializer_class = ProductSerializer
     pagination_class = CatalogPagination

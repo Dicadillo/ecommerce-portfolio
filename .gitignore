@@ -3,6 +3,13 @@ __pycache__/
 *.py[cod]
 .venv/
 **/.env
+**/.env.*
+!**/.env.example
+.coverage
+coverage.xml
+htmlcov/
+*.key
+*.pem
 .pytest_cache/
 .ruff_cache/
 

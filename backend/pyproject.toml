@@ -14,6 +14,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "pytest>=8.4,<10.0",
+    "pytest-cov>=6.2,<8.0",
     "pytest-django>=4.11,<5.0",
     "ruff>=0.12,<1.0",
 ]
@@ -21,6 +22,24 @@ dev = [
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings"
 python_files = ["test_*.py"]
+
+[tool.coverage.run]
+branch = true
+source = ["cart", "catalog", "config", "orders", "payments", "salud", "users"]
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+    "*/admin.py",
+    "*/apps.py",
+    "*/asgi.py",
+    "*/wsgi.py",
+    "*/settings_production.py",
+]
+
+[tool.coverage.report]
+fail_under = 95
+show_missing = true
+skip_covered = true
 
 [tool.ruff]
 line-length = 88

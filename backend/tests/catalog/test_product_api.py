@@ -3,6 +3,8 @@ from decimal import Decimal
 import pytest
 from django.urls import reverse
 
+from tests.assertions import assert_error_response
+
 
 def response_names(response):
     return [item["nombre"] for item in response.data["resultados"]]
@@ -143,3 +145,35 @@ def test_product_list_supports_custom_page_size(api_client, product_factory):
     assert response.data["conteo"] == 3
     assert len(response.data["resultados"]) == 2
     assert response.data["siguiente"] is not None
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    ("parameters", "detail_field"),
+    (
+        ({"categoria": "abc"}, "categoria"),
+        ({"categoria": 0}, "categoria"),
+        ({"activo": "quizas"}, "activo"),
+        ({"con_stock": "quizas"}, "con_stock"),
+        ({"ordenar": "stock"}, "ordenar"),
+        ({"tamano_pagina": "abc"}, "tamano_pagina"),
+        ({"tamano_pagina": 0}, "tamano_pagina"),
+    ),
+)
+def test_product_list_rejects_invalid_query_parameters(
+    parameters,
+    detail_field,
+    api_client,
+):
+    response = api_client.get(reverse("product-list"), parameters)
+
+    assert response.status_code == 400
+    assert_error_response(response, "validacion_incorrecta", detail_field)
+
+
+@pytest.mark.django_db
+def test_product_detail_returns_uniform_not_found_error(api_client):
+    response = api_client.get(reverse("product-detail", args=[999999]))
+
+    assert response.status_code == 404
+    assert_error_response(response, "recurso_no_encontrado")

@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
+from tests.assertions import assert_error_response
 from tests.users.conftest import VALID_PASSWORD
 
 User = get_user_model()
@@ -55,7 +56,7 @@ def test_registration_rejects_duplicate_username(api_client, user_factory):
     )
 
     assert response.status_code == 400
-    assert "usuario" in response.data
+    assert_error_response(response, "validacion_incorrecta", "usuario")
 
 
 @pytest.mark.django_db
@@ -67,7 +68,7 @@ def test_registration_rejects_invalid_email(api_client):
     )
 
     assert response.status_code == 400
-    assert "correo" in response.data
+    assert_error_response(response, "validacion_incorrecta", "correo")
 
 
 @pytest.mark.django_db
@@ -79,7 +80,11 @@ def test_registration_rejects_different_passwords(api_client):
     )
 
     assert response.status_code == 400
-    assert "confirmacion_contrasena" in response.data
+    assert_error_response(
+        response,
+        "validacion_incorrecta",
+        "confirmacion_contrasena",
+    )
 
 
 @pytest.mark.django_db
@@ -91,7 +96,7 @@ def test_registration_uses_django_password_validators(api_client):
     )
 
     assert response.status_code == 400
-    assert "contrasena" in response.data
+    assert_error_response(response, "validacion_incorrecta", "contrasena")
 
 
 @pytest.mark.django_db
@@ -113,7 +118,7 @@ def test_incorrect_login_returns_unauthorized(api_client, user_factory):
     response = login(api_client, password="WrongPass!123")
 
     assert response.status_code == 401
-    assert "detalle" in response.data
+    assert_error_response(response, "autenticacion_fallida")
 
 
 @pytest.mark.django_db
@@ -153,7 +158,7 @@ def test_profile_without_authentication_returns_unauthorized(api_client):
     response = api_client.get(reverse("profile"))
 
     assert response.status_code == 401
-    assert "detalle" in response.data
+    assert_error_response(response, "autenticacion_requerida")
 
 
 @pytest.mark.django_db

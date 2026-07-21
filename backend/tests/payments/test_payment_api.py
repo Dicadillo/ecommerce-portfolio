@@ -6,6 +6,7 @@ from rest_framework.test import APIClient
 
 from orders.models import Order, OrderItem
 from payments.models import Payment
+from tests.assertions import assert_error_response
 from tests.payments.conftest import authenticate_client
 
 APPROVED_CARD = "4111111111111111"
@@ -101,7 +102,7 @@ def test_nonexistent_order(authenticated_client):
     )
 
     assert response.status_code == 404
-    assert "pedido" in response.data
+    assert_error_response(response, "recurso_no_encontrado", "pedido")
 
 
 @pytest.mark.django_db
@@ -116,6 +117,7 @@ def test_cannot_pay_another_users_order(
     response = pay(authenticated_client, order)
 
     assert response.status_code == 404
+    assert_error_response(response, "recurso_no_encontrado", "pedido")
     assert not Payment.objects.exists()
 
 
@@ -130,7 +132,7 @@ def test_canceled_order_cannot_be_paid(authenticated_client, user, product_facto
     response = pay(authenticated_client, order)
 
     assert response.status_code == 400
-    assert "pedido" in response.data
+    assert_error_response(response, "regla_de_negocio", "pedido")
     assert not Payment.objects.exists()
 
 
@@ -147,6 +149,7 @@ def test_order_cannot_have_duplicate_payment(
 
     assert first_response.status_code == 201
     assert second_response.status_code == 400
+    assert_error_response(second_response, "regla_de_negocio", "pedido")
     assert Payment.objects.filter(order=order).count() == 1
 
 
@@ -197,6 +200,30 @@ def test_cannot_access_another_users_payment(
     response = authenticated_client.get(reverse("payment-detail", args=[payment_id]))
 
     assert response.status_code == 404
+
+
+@pytest.mark.django_db
+def test_cannot_refund_another_users_payment(
+    authenticated_client,
+    user_factory,
+    product_factory,
+):
+    other_user = user_factory()
+    other_client = authenticate_client(APIClient(), other_user)
+    product = product_factory(stock=4)
+    order = create_order(other_user, product)
+    payment_id = pay(other_client, order).data["id"]
+
+    response = authenticated_client.post(reverse("payment-refund", args=[payment_id]))
+
+    order.refresh_from_db()
+    product.refresh_from_db()
+    payment = Payment.objects.get(pk=payment_id)
+    assert response.status_code == 404
+    assert_error_response(response, "recurso_no_encontrado")
+    assert payment.status == Payment.Status.APPROVED
+    assert order.status == Order.Status.CONFIRMED
+    assert product.stock == 4
 
 
 @pytest.mark.django_db
@@ -260,7 +287,7 @@ def test_non_approved_payment_cannot_be_refunded(
     response = authenticated_client.post(reverse("payment-refund", args=[payment_id]))
 
     assert response.status_code == 400
-    assert "estado" in response.data
+    assert_error_response(response, "regla_de_negocio", "estado")
 
 
 @pytest.mark.django_db
@@ -285,7 +312,7 @@ def test_payment_endpoints_require_authentication(
     )
 
     assert response.status_code == 401
-    assert "detalle" in response.data
+    assert_error_response(response, "autenticacion_requerida")
 
 
 @pytest.mark.django_db
@@ -299,5 +326,38 @@ def test_invalid_card_number_is_rejected(
     response = pay(authenticated_client, order, "4111111111111112")
 
     assert response.status_code == 400
-    assert "numero_tarjeta" in response.data
+    assert_error_response(response, "validacion_incorrecta", "numero_tarjeta")
+    assert not Payment.objects.exists()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    ("field", "value", "detail_field"),
+    (
+        ("numero_tarjeta", "123", "numero_tarjeta"),
+        ("fecha_expiracion", "13/30", "fecha_expiracion"),
+        ("fecha_expiracion", "01/20", "fecha_expiracion"),
+        ("cvv", "12a", "cvv"),
+    ),
+)
+def test_invalid_payment_data_is_rejected(
+    field,
+    value,
+    detail_field,
+    authenticated_client,
+    user,
+    product_factory,
+):
+    order = create_order(user, product_factory())
+    payload = payment_payload(order.id)
+    payload[field] = value
+
+    response = authenticated_client.post(
+        reverse("payment-create"),
+        payload,
+        format="json",
+    )
+
+    assert response.status_code == 400
+    assert_error_response(response, "validacion_incorrecta", detail_field)
     assert not Payment.objects.exists()

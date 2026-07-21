@@ -77,7 +77,15 @@ class CatalogOrderingFilter(filters.BaseFilterBackend):
             descending = requested_field.startswith("-")
             public_field = requested_field.removeprefix("-")
             internal_field = self.field_mapping.get(public_field)
-            if internal_field:
-                prefix = "-" if descending else ""
-                ordering.append(f"{prefix}{internal_field}")
+            if internal_field is None:
+                raise ValidationError(
+                    {
+                        "ordenar": (
+                            "Solo se permite ordenar por nombre o precio, "
+                            "con un prefijo '-' opcional."
+                        )
+                    }
+                )
+            prefix = "-" if descending else ""
+            ordering.append(f"{prefix}{internal_field}")
         return ordering

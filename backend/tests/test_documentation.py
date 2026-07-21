@@ -66,3 +66,8 @@ def test_schema_includes_main_endpoints_and_jwt_security(schema_response):
     )
     assert schema["paths"]["/api/carrito/"]["get"]["security"] == [{"jwtAuth": []}]
     assert "security" not in schema["paths"]["/api/autenticacion/registro/"]["post"]
+
+    error_schema = schema["components"]["schemas"]["Error"]
+    assert "error" in error_schema["properties"]
+    assert "400" in schema["paths"]["/api/carrito/articulos/"]["post"]["responses"]
+    assert "401" in schema["paths"]["/api/carrito/articulos/"]["post"]["responses"]

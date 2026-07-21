@@ -5,6 +5,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 
 from cart.models import Cart, CartItem
+from tests.assertions import assert_error_response
 from tests.cart.conftest import authenticate_client
 
 
@@ -107,7 +108,7 @@ def test_add_nonexistent_product(authenticated_client):
     )
 
     assert response.status_code == 400
-    assert "producto" in response.data
+    assert_error_response(response, "validacion_incorrecta", "producto")
 
 
 @pytest.mark.django_db
@@ -117,7 +118,7 @@ def test_add_inactive_product(authenticated_client, product_factory):
     response = add_product(authenticated_client, product)
 
     assert response.status_code == 400
-    assert "producto" in response.data
+    assert_error_response(response, "regla_de_negocio", "producto")
 
 
 @pytest.mark.django_db
@@ -130,7 +131,7 @@ def test_add_zero_or_negative_quantity(
     response = add_product(authenticated_client, product_factory(), quantity)
 
     assert response.status_code == 400
-    assert "cantidad" in response.data
+    assert_error_response(response, "validacion_incorrecta", "cantidad")
 
 
 @pytest.mark.django_db
@@ -140,7 +141,7 @@ def test_add_quantity_above_stock(authenticated_client, product_factory):
     response = add_product(authenticated_client, product, quantity=3)
 
     assert response.status_code == 400
-    assert "cantidad" in response.data
+    assert_error_response(response, "regla_de_negocio", "cantidad")
 
 
 @pytest.mark.django_db
@@ -164,7 +165,7 @@ def test_all_cart_endpoints_require_authentication(
     response = getattr(api_client, method)(url, {}, format="json")
 
     assert response.status_code == 401
-    assert "detalle" in response.data
+    assert_error_response(response, "autenticacion_requerida")
 
 
 @pytest.mark.django_db
@@ -190,6 +191,8 @@ def test_users_cannot_access_each_others_cart(
     assert cart_response.data["articulos"] == []
     assert update_response.status_code == 404
     assert delete_response.status_code == 404
+    assert_error_response(update_response, "recurso_no_encontrado")
+    assert_error_response(delete_response, "recurso_no_encontrado")
     assert CartItem.objects.filter(pk=item_id, cart__user=owner).exists()
 
 

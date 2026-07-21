@@ -1,10 +1,10 @@
 from decimal import Decimal
 
 from django.db import transaction
-from rest_framework.exceptions import ValidationError
 
 from cart.models import Cart, CartItem
 from catalog.models import Product
+from config.exceptions import BusinessRuleError
 from orders.models import Order, OrderItem
 
 
@@ -16,13 +16,13 @@ def get_order_with_items(order):
 def create_order_from_cart(user, delivery_data):
     cart = Cart.objects.select_for_update().filter(user=user, active=True).first()
     if cart is None:
-        raise ValidationError({"carrito": "El carrito está vacío."})
+        raise BusinessRuleError({"carrito": "El carrito está vacío."})
 
     cart_items = list(
         CartItem.objects.select_for_update().filter(cart=cart).order_by("product_id")
     )
     if not cart_items:
-        raise ValidationError({"carrito": "El carrito está vacío."})
+        raise BusinessRuleError({"carrito": "El carrito está vacío."})
 
     product_ids = [item.product_id for item in cart_items]
     products = {
@@ -35,11 +35,11 @@ def create_order_from_cart(user, delivery_data):
     for item in cart_items:
         product = products[item.product_id]
         if not product.active:
-            raise ValidationError(
+            raise BusinessRuleError(
                 {"carrito": f"El producto '{product.name}' ya no está activo."}
             )
         if item.quantity > product.stock:
-            raise ValidationError(
+            raise BusinessRuleError(
                 {
                     "carrito": (
                         f"No hay stock suficiente para el producto '{product.name}'."
@@ -84,7 +84,7 @@ def cancel_order(order):
     locked_order = Order.objects.select_for_update().get(pk=order.pk)
     cancelable_statuses = (Order.Status.PENDING, Order.Status.CONFIRMED)
     if locked_order.status not in cancelable_statuses:
-        raise ValidationError(
+        raise BusinessRuleError(
             {"estado": "El pedido no se puede cancelar en su estado actual."}
         )
 

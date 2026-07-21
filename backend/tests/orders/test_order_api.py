@@ -6,6 +6,7 @@ from rest_framework.test import APIClient
 
 from cart.models import Cart, CartItem
 from orders.models import Order, OrderItem
+from tests.assertions import assert_error_response
 from tests.orders.conftest import authenticate_client
 
 
@@ -90,7 +91,7 @@ def test_checkout_rejects_empty_cart(authenticated_client):
     response = checkout(authenticated_client)
 
     assert response.status_code == 400
-    assert "carrito" in response.data
+    assert_error_response(response, "regla_de_negocio", "carrito")
     assert not Order.objects.exists()
 
 
@@ -107,7 +108,7 @@ def test_checkout_rejects_insufficient_stock(
 
     product.refresh_from_db()
     assert response.status_code == 400
-    assert "carrito" in response.data
+    assert_error_response(response, "regla_de_negocio", "carrito")
     assert product.stock == 2
     assert CartItem.objects.filter(pk=item.pk).exists()
     assert not Order.objects.exists()
@@ -193,6 +194,8 @@ def test_user_cannot_access_another_users_order(
 
     assert detail_response.status_code == 404
     assert cancel_response.status_code == 404
+    assert_error_response(detail_response, "recurso_no_encontrado")
+    assert_error_response(cancel_response, "recurso_no_encontrado")
 
 
 @pytest.mark.django_db
@@ -265,7 +268,7 @@ def test_cancel_rejects_forbidden_statuses(
 
     product.refresh_from_db()
     assert response.status_code == 400
-    assert "estado" in response.data
+    assert_error_response(response, "regla_de_negocio", "estado")
     assert product.stock == 5
 
 
@@ -292,7 +295,7 @@ def test_order_endpoints_require_authentication(
     )
 
     assert response.status_code == 401
-    assert "detalle" in response.data
+    assert_error_response(response, "autenticacion_requerida")
 
 
 @pytest.mark.django_db

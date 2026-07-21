@@ -1,6 +1,11 @@
 from drf_spectacular.utils import OpenApiExample, extend_schema, inline_serializer
 from rest_framework import serializers
-from rest_framework.decorators import api_view
+from rest_framework.decorators import (
+    api_view,
+    authentication_classes,
+    permission_classes,
+)
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 health_response_serializer = inline_serializer(
@@ -24,5 +29,7 @@ health_response_serializer = inline_serializer(
     ],
 )
 @api_view(["GET"])
+@authentication_classes([])
+@permission_classes([AllowAny])
 def comprobar_salud(solicitud):
     return Response({"status": "ok"})

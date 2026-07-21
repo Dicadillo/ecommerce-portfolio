@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -33,9 +32,9 @@ for environment_file in (BASE_DIR.parent / ".env", BASE_DIR / ".env"):
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get(
+SECRET_KEY = env(
     "DJANGO_CLAVE_SECRETA",
-    "django-insecure-local-development-only",
+    default="django-insecure-local-development-only",
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -157,6 +156,13 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "Lax"
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = "same-origin"
+X_FRAME_OPTIONS = "DENY"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -167,7 +173,9 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "EXCEPTION_HANDLER": "config.exception_handlers.api_exception_handler",
+    "NON_FIELD_ERRORS_KEY": "errores_generales",
 }
 
 SPECTACULAR_SETTINGS = {

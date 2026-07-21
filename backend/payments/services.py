@@ -1,7 +1,8 @@
 from django.db import transaction
-from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.exceptions import NotFound
 
 from catalog.models import Product
+from config.exceptions import BusinessRuleError
 from orders.models import Order
 from payments.models import Payment
 
@@ -25,9 +26,9 @@ def create_payment(user, order_id, card_number):
     except Order.DoesNotExist as error:
         raise NotFound({"pedido": "El pedido no existe."}) from error
     if order.status == Order.Status.CANCELED:
-        raise ValidationError({"pedido": "Un pedido cancelado no se puede pagar."})
+        raise BusinessRuleError({"pedido": "Un pedido cancelado no se puede pagar."})
     if Payment.objects.filter(order=order).exists():
-        raise ValidationError({"pedido": "El pedido ya tiene un pago."})
+        raise BusinessRuleError({"pedido": "El pedido ya tiene un pago."})
 
     payment_status = determine_payment_status(card_number)
     payment = Payment.objects.create(
@@ -50,7 +51,9 @@ def refund_payment(payment):
     locked_payment = Payment.objects.select_for_update().get(pk=payment.pk)
     order = Order.objects.select_for_update().get(pk=locked_payment.order_id)
     if locked_payment.status != Payment.Status.APPROVED:
-        raise ValidationError({"estado": "Solo se pueden reembolsar pagos aprobados."})
+        raise BusinessRuleError(
+            {"estado": "Solo se pueden reembolsar pagos aprobados."}
+        )
 
     if order.status != Order.Status.CANCELED:
         order_items = list(order.items.all().order_by("product_id"))

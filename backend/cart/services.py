@@ -1,9 +1,9 @@
 from django.db import transaction
 from django.db.models import Prefetch
-from rest_framework.exceptions import ValidationError
 
 from cart.models import Cart, CartItem
 from catalog.models import Product
+from config.exceptions import BusinessRuleError
 
 
 def get_active_cart(user):
@@ -20,9 +20,9 @@ def get_cart_with_items(cart):
 
 def validate_product(product, quantity):
     if not product.active:
-        raise ValidationError({"producto": "El producto no está activo."})
+        raise BusinessRuleError({"producto": "El producto no está activo."})
     if quantity > product.stock:
-        raise ValidationError({"cantidad": "La cantidad supera el stock disponible."})
+        raise BusinessRuleError({"cantidad": "La cantidad supera el stock disponible."})
 
 
 @transaction.atomic
@@ -59,7 +59,7 @@ def update_item_quantity(item, quantity):
     )
     locked_product = Product.objects.select_for_update().get(pk=locked_item.product_id)
     if quantity > locked_product.stock:
-        raise ValidationError({"cantidad": "La cantidad supera el stock disponible."})
+        raise BusinessRuleError({"cantidad": "La cantidad supera el stock disponible."})
 
     locked_item.product = locked_product
     locked_item.quantity = quantity
