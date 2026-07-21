@@ -17,6 +17,7 @@ Variables específicas de producción:
 - `DJANGO_HOSTS_PERMITIDOS`: hosts separados por comas, sin comodines amplios.
 - `DJANGO_ORIGENES_CSRF`: orígenes HTTPS autorizados para Django Admin.
 - `DJANGO_REDIRECCION_HTTPS`: debe permanecer activo tras verificar el proxy.
+- `DJANGO_COOKIES_SEGURAS`: debe permanecer activo en cualquier entorno HTTPS.
 - `DJANGO_CONFIAR_PROXY_HTTPS`: activar solo si el proxy controla y reemplaza
   `X-Forwarded-Proto`.
 - `DJANGO_HSTS_SEGUNDOS`: se recomienda un año después de validar HTTPS.

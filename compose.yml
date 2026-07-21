@@ -15,6 +15,44 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings_production
+      DJANGO_DEPURACION: "False"
+      DJANGO_COOKIES_SEGURAS: "False"
+      DJANGO_REDIRECCION_HTTPS: "False"
+      POSTGRES_HOST: db
+      POSTGRES_PORT: "5432"
+      DJANGO_EJECUTAR_MIGRACIONES: ${DJANGO_EJECUTAR_MIGRACIONES:-True}
+      DJANGO_RECOLECTAR_ESTATICOS: ${DJANGO_RECOLECTAR_ESTATICOS:-True}
+      USUARIO_DEMO_CONTRASENA: ${USUARIO_DEMO_CONTRASENA}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/salud/', timeout=3)",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 30s
 
 volumes:
   datos_postgres:
