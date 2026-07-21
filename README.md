@@ -3,12 +3,13 @@
 Monorepo para un portfolio profesional de QA Automation/SDET. El backend está
 construido con Django REST Framework, PostgreSQL y JWT; incluye catálogo,
 carrito, pedidos, pagos simulados y documentación OpenAPI. Las suites externas
-se organizan en `automation` y el frontend permanece pendiente.
+se organizan en `automation`. El frontend usa React, TypeScript y Vite como base
+para consumir la API REST.
 
 ## Arquitectura
 
 - `backend`: API Django, tests y contenedor de producción con Gunicorn.
-- `frontend`: futuro cliente React.
+- `frontend`: cliente React con enrutado, cliente HTTP y pruebas unitarias.
 - `automation`: suites API, Playwright, Selenium y Robot Framework.
 - `infrastructure`: recursos adicionales de infraestructura y CI/CD.
 - `docs`: decisiones de arquitectura, seguridad y despliegue.
@@ -111,6 +112,33 @@ uv run pytest
 uv run pytest --cov --cov-report=term-missing
 uv run ruff check .
 uv run ruff format --check .
+```
+
+## Desarrollo del frontend
+
+La configuración pública de la API se copia desde el ejemplo local. Las
+variables con prefijo `VITE_` se incorporan al código servido al navegador, por
+lo que nunca deben contener secretos:
+
+```bash
+cd frontend
+cp .env.example .env
+npm install
+npm run dev
+```
+
+Por defecto, el cliente utiliza `VITE_API_URL=http://127.0.0.1:8000/api/`. La
+aplicación de desarrollo queda disponible en <http://127.0.0.1:5173/>.
+
+Controles disponibles:
+
+```bash
+npm run lint
+npm run test
+npm run test:watch
+npm run build
+npm run preview
+npm run format:check
 ```
 
 ## URLs locales
