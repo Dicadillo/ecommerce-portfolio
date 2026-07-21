@@ -1,9 +1,12 @@
 import type { RouteObject } from 'react-router-dom';
 
+import { ProtectedRoute } from '../components/ProtectedRoute';
 import { MainLayout } from '../layouts/MainLayout';
 import { HomePage } from '../pages/HomePage';
+import { LoginPage } from '../pages/LoginPage';
 import { NotFoundPage } from '../pages/NotFoundPage';
 import { PlaceholderPage } from '../pages/PlaceholderPage';
+import { RegisterPage } from '../pages/RegisterPage';
 
 export const routes: RouteObject[] = [
   {
@@ -16,12 +19,11 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'login',
-        element: (
-          <PlaceholderPage
-            description="El acceso de usuarios se implementará en la siguiente fase."
-            title="Iniciar sesión"
-          />
-        ),
+        element: <LoginPage />,
+      },
+      {
+        path: 'registro',
+        element: <RegisterPage />,
       },
       {
         path: 'productos',
@@ -35,19 +37,23 @@ export const routes: RouteObject[] = [
       {
         path: 'carrito',
         element: (
-          <PlaceholderPage
-            description="La gestión del carrito todavía no está disponible."
-            title="Carrito"
-          />
+          <ProtectedRoute>
+            <PlaceholderPage
+              description="La gestión del carrito todavía no está disponible."
+              title="Carrito"
+            />
+          </ProtectedRoute>
         ),
       },
       {
         path: 'pedidos',
         element: (
-          <PlaceholderPage
-            description="El historial de pedidos se implementará más adelante."
-            title="Pedidos"
-          />
+          <ProtectedRoute>
+            <PlaceholderPage
+              description="El historial de pedidos se implementará más adelante."
+              title="Pedidos"
+            />
+          </ProtectedRoute>
         ),
       },
       {

@@ -73,9 +73,38 @@ a {
   text-underline-offset: 0.35rem;
 }
 
+.session-user {
+  padding: 0.35rem 0;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.navigation-button {
+  padding: 0.35rem 0;
+  border: 0;
+  color: #dbe8df;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.navigation-button:hover {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 0.35rem;
+}
+
+.navigation-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
 .main-navigation a:focus-visible,
 .brand:focus-visible,
-.primary-link:focus-visible {
+.primary-link:focus-visible,
+.navigation-button:focus-visible,
+.primary-button:focus-visible,
+.form-field input:focus-visible {
   outline: 3px solid #f6c453;
   outline-offset: 3px;
 }
@@ -87,7 +116,8 @@ a {
 }
 
 .hero,
-.placeholder-page {
+.placeholder-page,
+.auth-page {
   max-width: 44rem;
 }
 
@@ -108,12 +138,99 @@ h1 {
 }
 
 .hero > p:not(.eyebrow),
-.placeholder-page > p:not(.eyebrow) {
+.placeholder-page > p:not(.eyebrow),
+.auth-page > p:not(.eyebrow) {
   max-width: 38rem;
   margin: 1.5rem 0;
   color: #536159;
   font-size: 1.15rem;
   line-height: 1.7;
+}
+
+.auth-form {
+  display: grid;
+  gap: 1.25rem;
+  max-width: 30rem;
+  padding: 1.5rem;
+  border: 1px solid #d9e1dc;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  box-shadow: 0 0.75rem 2rem rgb(23 63 43 / 8%);
+}
+
+.form-field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.form-field label {
+  font-weight: 700;
+}
+
+.form-field input {
+  width: 100%;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid #9cab9f;
+  border-radius: 0.4rem;
+  color: inherit;
+  background: #ffffff;
+  font: inherit;
+}
+
+.form-field input[aria-invalid='true'] {
+  border-color: #b42318;
+}
+
+.field-error {
+  color: #b42318;
+  font-size: 0.9rem;
+}
+
+.form-banner {
+  padding: 0.85rem 1rem;
+  border-radius: 0.4rem;
+  line-height: 1.5;
+}
+
+.form-banner-error {
+  color: #7a271a;
+  background: #fef3f2;
+}
+
+.form-banner-success {
+  max-width: 30rem;
+  margin-bottom: 1rem;
+  color: #14532d;
+  background: #dcfce7;
+}
+
+.primary-button {
+  padding: 0.8rem 1rem;
+  border: 0;
+  border-radius: 0.4rem;
+  color: #ffffff;
+  background: #28724b;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primary-button:hover:not(:disabled) {
+  background: #1f593b;
+}
+
+.primary-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.auth-alternative {
+  font-size: 1rem !important;
+}
+
+.auth-alternative a {
+  color: #1f593b;
+  font-weight: 700;
 }
 
 .primary-link {

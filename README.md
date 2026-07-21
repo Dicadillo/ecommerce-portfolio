@@ -141,6 +141,23 @@ npm run preview
 npm run format:check
 ```
 
+### Autenticación del frontend
+
+El access token se conserva únicamente en memoria y se añade automáticamente
+como `Authorization: Bearer` a las peticiones privadas. El refresh token se
+guarda en `sessionStorage`, de modo que sobrevive a una recarga dentro de la
+misma pestaña pero se elimina al cerrar su sesión de navegador. Cuando una
+petición recibe un `401`, el cliente intenta un único refresh y repite la
+petición una vez; si falla, elimina ambos tokens y devuelve al usuario al estado
+anónimo.
+
+Esta solución es intencionadamente sencilla para un portfolio. Al ser
+`sessionStorage` accesible desde JavaScript, una vulnerabilidad XSS podría leer
+el refresh token. En producción se recomienda que el backend entregue el token
+de refresco mediante una cookie `HttpOnly`, `Secure` y `SameSite`, junto con una
+política CSP estricta. El frontend no almacena contraseñas, perfiles ni otros
+datos sensibles.
+
 ## URLs locales
 
 - API y comprobación de salud: <http://127.0.0.1:8000/api/salud/>
