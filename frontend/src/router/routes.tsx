@@ -6,6 +6,8 @@ import { HomePage } from '../pages/HomePage';
 import { LoginPage } from '../pages/LoginPage';
 import { NotFoundPage } from '../pages/NotFoundPage';
 import { PlaceholderPage } from '../pages/PlaceholderPage';
+import { ProductDetailPage } from '../pages/ProductDetailPage';
+import { ProductListPage } from '../pages/ProductListPage';
 import { RegisterPage } from '../pages/RegisterPage';
 
 export const routes: RouteObject[] = [
@@ -27,12 +29,11 @@ export const routes: RouteObject[] = [
       },
       {
         path: 'productos',
-        element: (
-          <PlaceholderPage
-            description="El catálogo se conectará con la API en una fase posterior."
-            title="Productos"
-          />
-        ),
+        element: <ProductListPage />,
+      },
+      {
+        path: 'productos/:id',
+        element: <ProductDetailPage />,
       },
       {
         path: 'carrito',
