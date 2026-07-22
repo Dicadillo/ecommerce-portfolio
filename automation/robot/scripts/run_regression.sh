@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+uv run robot \
+  --include regression \
+  --outputdir reports/regression \
+  tests

@@ -1,0 +1,28 @@
+[project]
+name = "ecommerce-robot-automation"
+version = "0.1.0"
+description = "Suite E2E del ecommerce con Robot Framework"
+requires-python = ">=3.12"
+
+dependencies = [
+    "robotframework>=7.0",
+    "robotframework-seleniumlibrary>=6.7",
+    "robotframework-pabot>=4.0",
+    "python-dotenv>=1.0",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.12",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
