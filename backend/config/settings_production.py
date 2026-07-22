@@ -8,7 +8,13 @@ SECRET_KEY = env("DJANGO_CLAVE_SECRETA")
 ALLOWED_HOSTS = env.list("DJANGO_HOSTS_PERMITIDOS")
 CSRF_TRUSTED_ORIGINS = env.list("DJANGO_ORIGENES_CSRF", default=[])
 
-MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")  # noqa: F405
+cors_middleware_position = MIDDLEWARE.index(  # noqa: F405
+    "corsheaders.middleware.CorsMiddleware"
+)
+MIDDLEWARE.insert(  # noqa: F405
+    cors_middleware_position + 1,
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+)
 
 SECURE_SSL_REDIRECT = env.bool("DJANGO_REDIRECCION_HTTPS", default=True)
 SECURE_HSTS_SECONDS = env.int("DJANGO_HSTS_SEGUNDOS", default=31536000)
