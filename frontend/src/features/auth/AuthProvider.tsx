@@ -8,6 +8,7 @@ import type {
   RegistrationData,
   User,
 } from '../../types/auth';
+import { clearPaymentRegistry } from '../payments/paymentRegistry';
 import { AuthContext } from './AuthContext';
 import { clearAuthSession, getRefreshToken, saveAuthSession } from './authStorage';
 
@@ -26,6 +27,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     const removeSessionExpiredHandler = setSessionExpiredHandler(() => {
       if (isMounted) {
+        clearPaymentRegistry();
         setUser(null);
         setStatus('anonymous');
       }
@@ -41,6 +43,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         })
         .catch(() => {
           clearAuthSession();
+          clearPaymentRegistry();
           if (isMounted) {
             setUser(null);
             setStatus('anonymous');
@@ -55,6 +58,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   const login = useCallback(async (credentials: LoginCredentials) => {
+    clearPaymentRegistry();
     const tokens = await loginUser(credentials);
     saveAuthSession(tokens);
 
@@ -83,6 +87,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       // El cierre local debe completarse aunque el servidor no esté disponible.
     } finally {
       clearAuthSession();
+      clearPaymentRegistry();
       setUser(null);
       setStatus('anonymous');
     }

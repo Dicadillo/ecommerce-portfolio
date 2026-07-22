@@ -6,6 +6,7 @@ import { cancelOrder, getOrder } from '../api/orderApi';
 import { ErrorState, LoadingState } from '../features/catalog/CatalogState';
 import { OrderItems } from '../features/orders/OrderItems';
 import { OrderStatusBadge } from '../features/orders/OrderStatusBadge';
+import { OrderPaymentSection } from '../features/payments/OrderPaymentSection';
 import type { Order } from '../types/order';
 import { getApiErrorMessage, parseApiError } from '../utils/apiErrors';
 import { formatPrice } from '../utils/catalog';
@@ -105,6 +106,13 @@ export function OrderDetailPage() {
     } finally {
       setIsCancelling(false);
     }
+  }
+
+  function handleOrderRefunded() {
+    setRequest((current) => ({
+      ...current,
+      order: current.order ? { ...current.order, estado: 'cancelado' } : null,
+    }));
   }
 
   if (status === 'loading') {
@@ -207,6 +215,8 @@ export function OrderDetailPage() {
           )}
         </aside>
       </div>
+
+      <OrderPaymentSection onOrderRefunded={handleOrderRefunded} order={order} />
     </article>
   );
 }

@@ -9,6 +9,7 @@ import { LoginPage } from '../pages/LoginPage';
 import { NotFoundPage } from '../pages/NotFoundPage';
 import { OrderDetailPage } from '../pages/OrderDetailPage';
 import { OrderListPage } from '../pages/OrderListPage';
+import { PaymentPage } from '../pages/PaymentPage';
 import { ProductDetailPage } from '../pages/ProductDetailPage';
 import { ProductListPage } from '../pages/ProductListPage';
 import { RegisterPage } from '../pages/RegisterPage';
@@ -67,6 +68,14 @@ export const routes: RouteObject[] = [
         element: (
           <ProtectedRoute>
             <OrderDetailPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'pedidos/:id/pagar',
+        element: (
+          <ProtectedRoute>
+            <PaymentPage />
           </ProtectedRoute>
         ),
       },
