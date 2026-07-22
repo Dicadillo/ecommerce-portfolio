@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import { getCategory, getProduct } from '../api/catalogApi';
 import { ErrorState, LoadingState } from '../features/catalog/CatalogState';
+import { AddToCartButton } from '../features/cart/AddToCartButton';
 import type { Category, Product } from '../types/catalog';
 import { formatPrice } from '../utils/catalog';
 import { parseApiError } from '../utils/apiErrors';
@@ -121,8 +122,6 @@ export function ProductDetailPage() {
     return null;
   }
 
-  const isAvailable = product.activo && product.stock > 0;
-
   return (
     <article className="product-detail">
       <Link className="back-link" to="/productos">
@@ -156,9 +155,7 @@ export function ProductDetailPage() {
               Este producto no está disponible actualmente.
             </p>
           )}
-          <button className="primary-button" disabled type="button">
-            {isAvailable ? 'Añadir al carrito próximamente' : 'No disponible'}
-          </button>
+          <AddToCartButton product={product} />
         </aside>
       </div>
     </article>

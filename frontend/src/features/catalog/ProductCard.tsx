@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 
 import type { Product } from '../../types/catalog';
 import { formatPrice } from '../../utils/catalog';
+import { AddToCartButton } from '../cart/AddToCartButton';
 
 interface ProductCardProps {
   categoryName: string;
@@ -9,8 +10,6 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ categoryName, product }: ProductCardProps) {
-  const isAvailable = product.activo && product.stock > 0;
-
   return (
     <article className="product-card">
       <div className="product-card-header">
@@ -37,14 +36,7 @@ export function ProductCard({ categoryName, product }: ProductCardProps) {
             {product.stock > 0 ? `${product.stock} unidades disponibles` : 'Sin stock'}
           </p>
         </div>
-        <button
-          className="primary-button"
-          disabled
-          title={isAvailable ? 'El carrito se implementará próximamente' : undefined}
-          type="button"
-        >
-          {isAvailable ? 'Añadir próximamente' : 'No disponible'}
-        </button>
+        <AddToCartButton product={product} />
       </div>
     </article>
   );

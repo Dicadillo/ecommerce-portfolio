@@ -43,3 +43,8 @@ export function parseApiError(error: unknown, fallbackMessage: string): ParsedAp
     message: apiError?.mensaje ?? fallbackMessage,
   };
 }
+
+export function getApiErrorMessage(error: unknown, fallbackMessage: string) {
+  const parsedError = parseApiError(error, fallbackMessage);
+  return Object.values(parsedError.fieldErrors)[0] ?? parsedError.message;
+}

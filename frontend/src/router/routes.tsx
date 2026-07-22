@@ -2,6 +2,7 @@ import type { RouteObject } from 'react-router-dom';
 
 import { ProtectedRoute } from '../components/ProtectedRoute';
 import { MainLayout } from '../layouts/MainLayout';
+import { CartPage } from '../pages/CartPage';
 import { HomePage } from '../pages/HomePage';
 import { LoginPage } from '../pages/LoginPage';
 import { NotFoundPage } from '../pages/NotFoundPage';
@@ -39,10 +40,7 @@ export const routes: RouteObject[] = [
         path: 'carrito',
         element: (
           <ProtectedRoute>
-            <PlaceholderPage
-              description="La gestión del carrito todavía no está disponible."
-              title="Carrito"
-            />
+            <CartPage />
           </ProtectedRoute>
         ),
       },
