@@ -3,10 +3,12 @@ import type { RouteObject } from 'react-router-dom';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 import { MainLayout } from '../layouts/MainLayout';
 import { CartPage } from '../pages/CartPage';
+import { CheckoutPage } from '../pages/CheckoutPage';
 import { HomePage } from '../pages/HomePage';
 import { LoginPage } from '../pages/LoginPage';
 import { NotFoundPage } from '../pages/NotFoundPage';
-import { PlaceholderPage } from '../pages/PlaceholderPage';
+import { OrderDetailPage } from '../pages/OrderDetailPage';
+import { OrderListPage } from '../pages/OrderListPage';
 import { ProductDetailPage } from '../pages/ProductDetailPage';
 import { ProductListPage } from '../pages/ProductListPage';
 import { RegisterPage } from '../pages/RegisterPage';
@@ -45,13 +47,26 @@ export const routes: RouteObject[] = [
         ),
       },
       {
+        path: 'checkout',
+        element: (
+          <ProtectedRoute>
+            <CheckoutPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: 'pedidos',
         element: (
           <ProtectedRoute>
-            <PlaceholderPage
-              description="El historial de pedidos se implementará más adelante."
-              title="Pedidos"
-            />
+            <OrderListPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'pedidos/:id',
+        element: (
+          <ProtectedRoute>
+            <OrderDetailPage />
           </ProtectedRoute>
         ),
       },

@@ -180,11 +180,31 @@ export function CartProvider({ children }: CartProviderProps) {
     });
   }, [refreshAfterMutation, runMutation]);
 
+  const completeCheckout = useCallback(() => {
+    productCache.current.clear();
+    setRequest((current) => ({
+      cart:
+        current.key === requestKey && current.cart
+          ? {
+              ...current.cart,
+              articulos: [],
+              cantidad_total: 0,
+              total: '0.00',
+            }
+          : null,
+      error: '',
+      key: requestKey,
+      products: {},
+      status: 'ready',
+    }));
+  }, [requestKey]);
+
   const value = useMemo(
     () => ({
       addProduct,
       cart: currentRequest.cart,
       clear,
+      completeCheckout,
       error: currentRequest.error,
       isLoading: currentRequest.status === 'loading',
       isMutating,
@@ -194,7 +214,15 @@ export function CartProvider({ children }: CartProviderProps) {
       retry: () => setRetryVersion((version) => version + 1),
       updateQuantity,
     }),
-    [addProduct, clear, currentRequest, isMutating, removeItem, updateQuantity],
+    [
+      addProduct,
+      clear,
+      completeCheckout,
+      currentRequest,
+      isMutating,
+      removeItem,
+      updateQuantity,
+    ],
   );
 
   return <CartContext value={value}>{children}</CartContext>;

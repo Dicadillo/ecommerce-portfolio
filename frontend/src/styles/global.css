@@ -105,6 +105,7 @@ a {
 .navigation-button:focus-visible,
 .primary-button:focus-visible,
 .secondary-button:focus-visible,
+.danger-button:focus-visible,
 .form-field input:focus-visible,
 .catalog-controls input:focus-visible,
 .catalog-controls select:focus-visible {
@@ -830,6 +831,258 @@ h1 {
   line-height: 1.5;
 }
 
+.checkout-link {
+  display: block;
+  text-align: center;
+}
+
+.checkout-page > header,
+.orders-page > header {
+  margin-bottom: 2rem;
+}
+
+.checkout-page > header > p:last-child {
+  margin: 1rem 0 0;
+  color: #536159;
+}
+
+.checkout-layout,
+.order-detail-layout {
+  display: grid;
+  align-items: start;
+  grid-template-columns: minmax(0, 1.25fr) minmax(18rem, 0.75fr);
+  gap: 1.5rem;
+}
+
+.checkout-form,
+.checkout-summary,
+.order-detail-card,
+.shipping-address,
+.order-card,
+.orders-empty {
+  border: 1px solid #d9e1dc;
+  border-radius: 0.75rem;
+  background: #ffffff;
+}
+
+.checkout-form {
+  display: grid;
+  gap: 1.15rem;
+  padding: clamp(1.25rem, 4vw, 2rem);
+}
+
+.checkout-summary {
+  padding: 1.5rem;
+  box-shadow: 0 0.75rem 2rem rgb(23 63 43 / 8%);
+}
+
+.checkout-summary h2,
+.order-detail-card h2,
+.shipping-address h2 {
+  margin: 0 0 1.25rem;
+}
+
+.checkout-summary ul,
+.order-items,
+.orders-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.checkout-summary li,
+.order-items li {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #edf1ee;
+}
+
+.checkout-summary li span {
+  color: #536159;
+}
+
+.checkout-summary > div,
+.order-detail-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.15rem;
+  margin-top: 0.35rem;
+  font-size: 1.2rem;
+}
+
+.checkout-summary > p {
+  margin: 1rem 0 0;
+  color: #536159;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.orders-empty {
+  display: grid;
+  justify-items: start;
+  gap: 0.75rem;
+  min-height: 18rem;
+  align-content: center;
+  padding: clamp(1.5rem, 5vw, 3rem);
+}
+
+.orders-empty h2,
+.orders-empty p {
+  margin: 0;
+}
+
+.orders-empty p {
+  color: #536159;
+}
+
+.orders-list {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.order-card {
+  padding: clamp(1.25rem, 4vw, 1.75rem);
+  box-shadow: 0 0.5rem 1.5rem rgb(23 63 43 / 6%);
+}
+
+.order-card > header,
+.order-card > footer,
+.order-detail-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.order-card h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.35rem;
+}
+
+.order-card h2 a {
+  text-decoration: none;
+}
+
+.order-card h2 a:hover {
+  color: #28724b;
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
+
+.order-card time,
+.order-detail-heading time {
+  color: #536159;
+  font-size: 0.9rem;
+}
+
+.order-card .order-items {
+  margin: 1rem 0;
+}
+
+.order-card > footer {
+  padding-top: 1rem;
+  border-top: 1px solid #d9e1dc;
+  font-size: 1.15rem;
+}
+
+.order-status {
+  display: inline-block;
+  flex: none;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.order-status-pendiente {
+  color: #854d0e;
+  background: #fef9c3;
+}
+
+.order-status-confirmado {
+  color: #1e40af;
+  background: #dbeafe;
+}
+
+.order-status-enviado {
+  color: #6b21a8;
+  background: #f3e8ff;
+}
+
+.order-status-entregado {
+  color: #14532d;
+  background: #dcfce7;
+}
+
+.order-status-cancelado {
+  color: #7a271a;
+  background: #fef3f2;
+}
+
+.order-items li > div {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.order-items li > div span {
+  color: #536159;
+  font-size: 0.9rem;
+}
+
+.order-detail {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.order-detail > .form-banner {
+  max-width: none;
+  margin: 0;
+}
+
+.order-detail-heading {
+  align-items: center;
+}
+
+.order-detail-heading h1 {
+  margin-bottom: 0.65rem;
+  font-size: clamp(2.25rem, 6vw, 4rem);
+}
+
+.order-detail-card,
+.shipping-address {
+  padding: clamp(1.25rem, 4vw, 1.75rem);
+}
+
+.order-detail-total {
+  border-top: 1px solid #d9e1dc;
+}
+
+.shipping-address address {
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: 1.5rem;
+  color: #536159;
+  font-style: normal;
+  line-height: 1.45;
+}
+
+.shipping-address address strong {
+  color: #19221d;
+}
+
+.non-cancelable-message {
+  padding: 0.8rem;
+  margin: 0;
+  border-radius: 0.4rem;
+  color: #536159;
+  background: #f4f7f5;
+  line-height: 1.5;
+}
+
 .primary-link {
   display: inline-block;
   padding: 0.8rem 1.1rem;
@@ -873,8 +1126,16 @@ h1 {
   .product-grid,
   .product-detail-content,
   .cart-layout,
-  .cart-item {
+  .cart-item,
+  .checkout-layout,
+  .order-detail-layout {
     grid-template-columns: 1fr;
+  }
+
+  .order-card > header,
+  .order-detail-heading {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .cart-item-subtotal {

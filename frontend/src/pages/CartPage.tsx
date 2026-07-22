@@ -157,7 +157,9 @@ export function CartPage() {
               <span>Total</span>
               <strong>{formatPrice(cart.total)}</strong>
             </div>
-            <p>El checkout se implementará próximamente.</p>
+            <Link className="primary-link checkout-link" to="/checkout">
+              Continuar al checkout
+            </Link>
           </aside>
         </div>
       )}

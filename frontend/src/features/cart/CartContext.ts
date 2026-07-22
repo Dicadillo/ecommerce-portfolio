@@ -7,6 +7,7 @@ export interface CartContextValue {
   addProduct: (product: Product, quantity?: number) => Promise<void>;
   cart: Cart | null;
   clear: () => Promise<void>;
+  completeCheckout: () => void;
   error: string;
   isLoading: boolean;
   isMutating: boolean;
