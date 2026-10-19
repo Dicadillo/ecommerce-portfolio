@@ -87,7 +87,7 @@ export function CheckoutForm({ onSubmit }: CheckoutFormProps) {
   ];
 
   return (
-    <form className="checkout-form" noValidate onSubmit={handleSubmit}>
+    <form className="checkout-form" data-testid="checkout-form" noValidate onSubmit={handleSubmit}>
       {serverError && (
         <div className="form-banner form-banner-error" role="alert">
           {serverError}
@@ -113,7 +113,12 @@ export function CheckoutForm({ onSubmit }: CheckoutFormProps) {
         </div>
       ))}
 
-      <button className="primary-button" disabled={isSubmitting} type="submit">
+      <button
+        className="primary-button"
+        data-testid="checkout-submit"
+        disabled={isSubmitting}
+        type="submit"
+      >
         {isSubmitting ? 'Creando pedido…' : 'Confirmar pedido'}
       </button>
     </form>

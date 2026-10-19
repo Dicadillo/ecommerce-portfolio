@@ -6,7 +6,7 @@ export function MainLayout() {
   return (
     <div className="app-shell">
       <header className="site-header">
-        <Link className="brand" to="/">
+        <Link className="brand" data-testid="nav-brand" to="/">
           Ecommerce QA
         </Link>
         <MainNavigation />

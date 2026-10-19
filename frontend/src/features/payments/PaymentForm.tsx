@@ -91,7 +91,7 @@ export function PaymentForm({ onSubmit, orderId }: PaymentFormProps) {
   }
 
   return (
-    <form className="payment-form" noValidate onSubmit={handleSubmit}>
+    <form className="payment-form" data-testid="payment-form" noValidate onSubmit={handleSubmit}>
       <header>
         <h2>Datos de pago simulado</h2>
         <p>No introduzcas datos de una tarjeta real.</p>
@@ -194,7 +194,12 @@ export function PaymentForm({ onSubmit, orderId }: PaymentFormProps) {
         <span>Otra tarjeta válida: pendiente</span>
       </div>
 
-      <button className="primary-button" disabled={isSubmitting} type="submit">
+      <button
+        className="primary-button"
+        data-testid={`payment-submit-${orderId}`}
+        disabled={isSubmitting}
+        type="submit"
+      >
         {isSubmitting ? 'Procesando pago…' : 'Pagar pedido'}
       </button>
     </form>

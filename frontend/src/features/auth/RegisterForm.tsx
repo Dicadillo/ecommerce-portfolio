@@ -82,7 +82,7 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
   }
 
   return (
-    <form className="auth-form" noValidate onSubmit={handleSubmit}>
+    <form className="auth-form" data-testid="register-form" noValidate onSubmit={handleSubmit}>
       {serverError && (
         <div className="form-banner form-banner-error" role="alert">
           {serverError}
@@ -164,7 +164,12 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
         )}
       </div>
 
-      <button className="primary-button" disabled={isSubmitting} type="submit">
+      <button
+        className="primary-button"
+        data-testid="register-submit"
+        disabled={isSubmitting}
+        type="submit"
+      >
         {isSubmitting ? 'Creando cuenta…' : 'Crear cuenta'}
       </button>
     </form>

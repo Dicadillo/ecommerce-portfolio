@@ -62,7 +62,7 @@ export function OrderListPage() {
       )}
 
       {request.status === 'ready' && request.orders.length === 0 && (
-        <div className="orders-empty">
+        <div className="orders-empty" data-testid="orders-empty">
           <h2>Todavía no tienes pedidos</h2>
           <p>Cuando completes una compra aparecerá aquí.</p>
           <Link className="primary-link" to="/productos">
@@ -72,14 +72,16 @@ export function OrderListPage() {
       )}
 
       {request.status === 'ready' && request.orders.length > 0 && (
-        <ul className="orders-list">
+        <ul className="orders-list" data-testid="order-list">
           {request.orders.map((order) => (
             <li key={order.id}>
-              <article className="order-card">
+              <article className="order-card" data-testid={`order-card-${order.id}`}>
                 <header>
                   <div>
                     <h2>
-                      <Link to={`/pedidos/${order.id}`}>Pedido #{order.id}</Link>
+                      <Link data-testid={`order-detail-link-${order.id}`} to={`/pedidos/${order.id}`}>
+                        Pedido #{order.id}
+                      </Link>
                     </h2>
                     <time dateTime={order.fecha_creacion}>
                       {formatOrderDate(order.fecha_creacion)}

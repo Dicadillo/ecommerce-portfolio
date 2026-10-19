@@ -123,8 +123,8 @@ export function ProductDetailPage() {
   }
 
   return (
-    <article className="product-detail">
-      <Link className="back-link" to="/productos">
+    <article className="product-detail" data-testid={`product-detail-${product.id}`}>
+      <Link className="back-link" data-testid="product-detail-back" to="/productos">
         ← Volver a productos
       </Link>
 

@@ -47,6 +47,7 @@ export function CartPage() {
         {cart && cart.articulos.length > 0 && (
           <button
             className="danger-button"
+            data-testid="cart-clear"
             disabled={isMutating}
             onClick={handleClear}
             type="button"
@@ -67,10 +68,10 @@ export function CartPage() {
       {!isLoading && error && <ErrorState message={error} onRetry={retry} />}
 
       {!isLoading && !error && cart?.articulos.length === 0 && (
-        <div className="cart-empty">
+        <div className="cart-empty" data-testid="cart-empty">
           <h2>Tu carrito está vacío</h2>
           <p>Añade algún producto del catálogo para empezar.</p>
-          <Link className="primary-link" to="/productos">
+          <Link className="primary-link" data-testid="cart-browse-products" to="/productos">
             Ver productos
           </Link>
         </div>
@@ -88,14 +89,17 @@ export function CartPage() {
 
               return (
                 <li key={item.id}>
-                  <article className="cart-item">
+                  <article className="cart-item" data-testid={`cart-item-${product.id}`}>
                     <div className="cart-item-info">
                       <h2>
-                        <Link to={`/productos/${product.id}`}>{product.nombre}</Link>
+                        <Link data-testid={`cart-product-link-${product.id}`} to={`/productos/${product.id}`}>
+                          {product.nombre}
+                        </Link>
                       </h2>
                       <p>Precio unitario: {formatPrice(product.precio)}</p>
                       <button
                         className="text-button danger-text"
+                        data-testid={`cart-remove-${product.id}`}
                         disabled={isMutating}
                         onClick={() => void runOperation(() => removeItem(item.id))}
                         type="button"
@@ -109,6 +113,7 @@ export function CartPage() {
                       <div>
                         <button
                           aria-label={`Reducir cantidad de ${product.nombre}`}
+                          data-testid={`cart-decrease-${product.id}`}
                           disabled={isMutating || item.cantidad <= 1}
                           onClick={() =>
                             void runOperation(() =>
@@ -119,11 +124,15 @@ export function CartPage() {
                         >
                           −
                         </button>
-                        <output aria-label={`Cantidad de ${product.nombre}`}>
+                        <output
+                          aria-label={`Cantidad de ${product.nombre}`}
+                          data-testid={`cart-quantity-${product.id}`}
+                        >
                           {item.cantidad}
                         </output>
                         <button
                           aria-label={`Aumentar cantidad de ${product.nombre}`}
+                          data-testid={`cart-increase-${product.id}`}
                           disabled={isMutating || item.cantidad >= product.stock}
                           onClick={() =>
                             void runOperation(() =>
@@ -157,7 +166,7 @@ export function CartPage() {
               <span>Total</span>
               <strong>{formatPrice(cart.total)}</strong>
             </div>
-            <Link className="primary-link checkout-link" to="/checkout">
+            <Link className="primary-link checkout-link" data-testid="cart-checkout" to="/checkout">
               Continuar al checkout
             </Link>
           </aside>

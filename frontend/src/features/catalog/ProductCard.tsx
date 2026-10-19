@@ -11,7 +11,7 @@ interface ProductCardProps {
 
 export function ProductCard({ categoryName, product }: ProductCardProps) {
   return (
-    <article className="product-card">
+    <article className="product-card" data-testid={`product-card-${product.id}`}>
       <div className="product-card-header">
         <p className="product-category">{categoryName}</p>
         <div className="product-badges">
@@ -25,7 +25,9 @@ export function ProductCard({ categoryName, product }: ProductCardProps) {
       </div>
 
       <h2>
-        <Link to={`/productos/${product.id}`}>{product.nombre}</Link>
+        <Link data-testid={`product-detail-link-${product.id}`} to={`/productos/${product.id}`}>
+          {product.nombre}
+        </Link>
       </h2>
       <p className="product-description">{product.descripcion}</p>
 

@@ -173,8 +173,8 @@ export function PaymentPage() {
   }
 
   return (
-    <section className="payment-page">
-      <Link className="back-link" to={`/pedidos/${order.id}`}>
+    <section className="payment-page" data-testid={`payment-page-${order.id}`}>
+      <Link className="back-link" data-testid="payment-back-to-order" to={`/pedidos/${order.id}`}>
         ← Volver al pedido
       </Link>
 

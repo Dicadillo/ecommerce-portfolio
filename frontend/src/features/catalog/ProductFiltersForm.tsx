@@ -28,7 +28,12 @@ export function ProductFiltersForm({
 
   return (
     <div className="catalog-controls">
-      <form className="catalog-search" onSubmit={handleSearch} role="search">
+      <form
+        className="catalog-search"
+        data-testid="catalog-search-form"
+        onSubmit={handleSearch}
+        role="search"
+      >
         <label htmlFor="buscar-productos">Buscar por nombre</label>
         <div className="search-row">
           <input
@@ -39,7 +44,7 @@ export function ProductFiltersForm({
             placeholder="Por ejemplo, teclado"
             type="search"
           />
-          <button className="primary-button" type="submit">
+          <button className="primary-button" data-testid="catalog-search-submit" type="submit">
             Buscar
           </button>
         </div>
@@ -89,6 +94,7 @@ export function ProductFiltersForm({
         <label className="checkbox-filter">
           <input
             checked={inStock}
+            data-testid="catalog-in-stock-filter"
             onChange={(event) =>
               onFilterChange({ con_stock: event.target.checked ? 'true' : null })
             }

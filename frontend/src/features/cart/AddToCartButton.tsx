@@ -46,6 +46,7 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
     <div className="add-to-cart-action">
       <button
         className="primary-button"
+        data-testid={`add-to-cart-${product.id}`}
         disabled={!isAvailable || status === 'loading' || isMutating}
         onClick={handleAdd}
         type="button"
@@ -55,6 +56,7 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
       {feedback && (
         <span
           className={isError ? 'action-error' : 'action-success'}
+          data-testid={`add-to-cart-feedback-${product.id}`}
           role={isError ? 'alert' : 'status'}
         >
           {feedback}

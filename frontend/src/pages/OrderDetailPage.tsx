@@ -150,8 +150,8 @@ export function OrderDetailPage() {
   const cancelable = isCancelableStatus(order.estado);
 
   return (
-    <article className="order-detail">
-      <Link className="back-link" to="/pedidos">
+    <article className="order-detail" data-testid={`order-detail-${order.id}`}>
+      <Link className="back-link" data-testid="order-detail-back" to="/pedidos">
         ← Volver a pedidos
       </Link>
 
@@ -202,6 +202,7 @@ export function OrderDetailPage() {
           {cancelable ? (
             <button
               className="danger-button"
+              data-testid={`order-cancel-${order.id}`}
               disabled={isCancelling}
               onClick={handleCancel}
               type="button"

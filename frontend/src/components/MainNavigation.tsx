@@ -29,7 +29,7 @@ export function MainNavigation() {
   }
 
   return (
-    <nav aria-label="Navegación principal">
+    <nav aria-label="Navegación principal" data-testid="main-navigation">
       <ul className="main-navigation">
         {navigationItems.map(({ to, label, end }) => {
           const visibleLabel =
@@ -41,6 +41,7 @@ export function MainNavigation() {
             <li key={to}>
               <NavLink
                 className={({ isActive }) => (isActive ? 'active' : undefined)}
+                data-testid={`nav-${to === '/' ? 'home' : to.slice(1)}`}
                 end={end}
                 to={to}
               >
@@ -52,10 +53,10 @@ export function MainNavigation() {
         {status !== 'loading' && !isAuthenticated && (
           <>
             <li>
-              <NavLink to="/login">Iniciar sesión</NavLink>
+              <NavLink data-testid="nav-login" to="/login">Iniciar sesión</NavLink>
             </li>
             <li>
-              <NavLink to="/registro">Registrarse</NavLink>
+              <NavLink data-testid="nav-register" to="/registro">Registrarse</NavLink>
             </li>
           </>
         )}
@@ -65,6 +66,7 @@ export function MainNavigation() {
             <li>
               <button
                 className="navigation-button"
+                data-testid="logout-button"
                 disabled={isLoggingOut}
                 onClick={handleLogout}
                 type="button"

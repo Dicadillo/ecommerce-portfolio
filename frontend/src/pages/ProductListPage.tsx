@@ -162,9 +162,9 @@ export function ProductListPage() {
       />
 
       {categoriesError && (
-        <div className="inline-error" role="alert">
+        <div className="inline-error" data-testid="categories-error" role="alert">
           <span>{categoriesError}</span>
-          <button onClick={retryCategories} type="button">
+          <button data-testid="categories-retry" onClick={retryCategories} type="button">
             Reintentar categorías
           </button>
         </div>
@@ -188,7 +188,7 @@ export function ProductListPage() {
 
       {!isLoading && !error && products.resultados.length > 0 && (
         <>
-          <ul className="product-grid">
+          <ul className="product-grid" data-testid="product-list">
             {products.resultados.map((product) => (
               <li key={product.id}>
                 <ProductCard
@@ -205,15 +205,17 @@ export function ProductListPage() {
           <nav aria-label="Paginación de productos" className="pagination">
             <button
               className="secondary-button"
+              data-testid="pagination-previous"
               disabled={!products.anterior}
               onClick={() => changePage(Math.max(1, currentPage - 1))}
               type="button"
             >
               Anterior
             </button>
-            <span>Página {currentPage}</span>
+            <span data-testid="pagination-current">Página {currentPage}</span>
             <button
               className="secondary-button"
+              data-testid="pagination-next"
               disabled={!products.siguiente}
               onClick={() => changePage(currentPage + 1)}
               type="button"

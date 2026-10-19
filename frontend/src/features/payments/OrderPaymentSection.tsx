@@ -123,7 +123,11 @@ export function OrderPaymentSection({
         {order.estado === 'pendiente' ? (
           <>
             <p>Este pedido todavía está pendiente de pago.</p>
-            <Link className="primary-link" to={`/pedidos/${order.id}/pagar`}>
+            <Link
+              className="primary-link"
+              data-testid={`order-pay-${order.id}`}
+              to={`/pedidos/${order.id}/pagar`}
+            >
               Pagar pedido
             </Link>
           </>
@@ -154,6 +158,7 @@ export function OrderPaymentSection({
         </div>
         <button
           className="secondary-button"
+          data-testid={`payment-retry-${order.id}`}
           onClick={() => setRetry((value) => value + 1)}
           type="button"
         >
@@ -182,6 +187,7 @@ export function OrderPaymentSection({
       {payment.estado === 'aprobado' && (
         <button
           className="danger-button"
+          data-testid={`payment-refund-${payment.id}`}
           disabled={isRefunding}
           onClick={handleRefund}
           type="button"

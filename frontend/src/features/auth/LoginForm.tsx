@@ -60,7 +60,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
   }
 
   return (
-    <form className="auth-form" noValidate onSubmit={handleSubmit}>
+    <form className="auth-form" data-testid="login-form" noValidate onSubmit={handleSubmit}>
       {serverError && (
         <div className="form-banner form-banner-error" role="alert">
           {serverError}
@@ -108,7 +108,12 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         )}
       </div>
 
-      <button className="primary-button" disabled={isSubmitting} type="submit">
+      <button
+        className="primary-button"
+        data-testid="login-submit"
+        disabled={isSubmitting}
+        type="submit"
+      >
         {isSubmitting ? 'Iniciando sesión…' : 'Iniciar sesión'}
       </button>
     </form>
